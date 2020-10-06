@@ -29,7 +29,7 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new DataProcessingException("Can't add session", e);
+            throw new DataProcessingException("Can't add MovieSession", e);
         } finally {
             if (hibernateSession != null) {
                 hibernateSession.close();
@@ -51,7 +51,7 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
                     Date.valueOf(date.atTime(LocalTime.MAX).toLocalDate()));
             return query.getResultList();
         } catch (Exception e) {
-            throw new DataProcessingException("Can't get sessions", e);
+            throw new DataProcessingException("Can't get MovieSession list", e);
         }
     }
 }
