@@ -25,7 +25,8 @@ public class MovieDaoImpl implements MovieDao {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new DataProcessingException("Can't insert Movie entity", e);
+            throw new DataProcessingException("Can't insert Movie entity "
+                    + movie, e);
         } finally {
             if (session != null) {
                 session.close();
@@ -37,8 +38,6 @@ public class MovieDaoImpl implements MovieDao {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Query<Movie> getAllMoviesQuery = session.createQuery("from Movie", Movie.class);
             return getAllMoviesQuery.getResultList();
-        } catch (Exception e) {
-            throw new DataProcessingException("Can't get all Movies entities", e);
         }
     }
 }

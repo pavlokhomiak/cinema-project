@@ -64,6 +64,5 @@ public class Main {
         LocalDate localDate = LocalDate.of(2020, 10, 6);
         Long movieId = movie.getId();
         movieSessionService.findAvailableSessions(movieId, localDate).forEach(System.out::println);
-
     }
 }
