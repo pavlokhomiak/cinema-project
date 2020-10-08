@@ -4,9 +4,11 @@ import com.dev.cinema.lib.Injector;
 import com.dev.cinema.model.CinemaHall;
 import com.dev.cinema.model.Movie;
 import com.dev.cinema.model.MovieSession;
+import com.dev.cinema.security.AuthenticationService;
 import com.dev.cinema.service.CinemaHallService;
 import com.dev.cinema.service.MovieService;
 import com.dev.cinema.service.MovieSessionService;
+import com.dev.cinema.service.UserService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -19,6 +21,10 @@ public class Main {
                 .getInstance(CinemaHallService.class);
         final MovieSessionService movieSessionService = (MovieSessionService) injector
                 .getInstance(MovieSessionService.class);
+        final UserService userService = (UserService) injector
+                .getInstance(UserService.class);
+        final AuthenticationService authenticationService = (AuthenticationService) injector
+                .getInstance(AuthenticationService.class);
         movieService.getAll().forEach(System.out::println);
         cinemaHallService.getAll().forEach(System.out::println);
 
@@ -64,5 +70,15 @@ public class Main {
         LocalDate localDate = LocalDate.of(2020, 10, 6);
         Long movieId = movie.getId();
         movieSessionService.findAvailableSessions(movieId, localDate).forEach(System.out::println);
+
+        String userOneEmail = "pawa@gmail.com";
+        String userOnePassword = "1234";
+        authenticationService.register(userOneEmail, userOnePassword);
+
+        String userTwoEmail = "pawawa@gmail.com";
+        String userTwoPassword = "1234";
+        authenticationService.register(userTwoEmail, userTwoPassword);
+
+        System.out.println(userService.findByEmail("pawa@gmail.com"));
     }
 }
