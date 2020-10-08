@@ -1,6 +1,5 @@
 package com.dev.cinema.util;
 
-import com.dev.cinema.exceptions.DataProcessingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -25,7 +24,7 @@ public class HashUtil {
                 hashedPassword.append(String.format("%02x", b));
             }
         } catch (NoSuchAlgorithmException e) {
-            throw new DataProcessingException("No such algorithm", e);
+            throw new RuntimeException("No such algorithm", e);
         }
         return hashedPassword.toString();
     }
