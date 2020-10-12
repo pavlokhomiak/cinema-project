@@ -99,9 +99,6 @@ public class Main {
         shoppingCart = shoppingCartService.getByUser(user);
         System.out.println("SECOND " + shoppingCart);
 
-//        shoppingCartService.clear(shoppingCart);
-//        System.out.println(shoppingCart);
-
         Order order = orderService.completeOrder(shoppingCart.getTickets(), user);
         System.out.println(order);
         shoppingCart = shoppingCartService.getByUser(user);
