@@ -1,7 +1,5 @@
 package com.dev.cinema.model;
 
-import java.time.LocalDateTime;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,16 +11,14 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "movie_session")
-public class MovieSession {
+@Table(name = "ticket")
+public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    private Movie movie;
+    @JoinColumn(name = "movie_session")
+    private MovieSession movieSession;
     @ManyToOne
-    @JoinColumn(name = "cinema_hall")
-    private CinemaHall cinemaHall;
-    @Column(name = "show_time")
-    private LocalDateTime showTime;
+    private User user;
 }
