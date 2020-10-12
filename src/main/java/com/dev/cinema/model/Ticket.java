@@ -8,9 +8,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.Data;
+import lombok.ToString;
 
 @Entity
 @Data
+@ToString(of = "id")
 @Table(name = "ticket")
 public class Ticket {
     @Id

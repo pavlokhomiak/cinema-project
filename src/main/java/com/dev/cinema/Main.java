@@ -93,26 +93,26 @@ public class Main {
         System.out.println(user);
 
         ShoppingCart shoppingCart = shoppingCartService.getByUser(user);
-        System.out.println("FIRST " + shoppingCart);
-        shoppingCartService.addSession(movieSession, user);
+        System.out.println("FIRST\n" + shoppingCart);
 
+        shoppingCartService.addSession(movieSession, user);
         shoppingCart = shoppingCartService.getByUser(user);
-        System.out.println("SECOND " + shoppingCart);
+        System.out.println("CART AFTER ADD SESSION\n" + shoppingCart);
 
         Order order = orderService.completeOrder(shoppingCart.getTickets(), user);
-        System.out.println(order);
+        System.out.println("ORDER AFTER COMPLETE ORDER\n" + order);
         shoppingCart = shoppingCartService.getByUser(user);
-        System.out.println("AFTER COMPLETE ORDER " + shoppingCart);
+        System.out.println("CART AFTER COMPLETE ORDER\n" + shoppingCart);
 
         shoppingCartService.addSession(movieSession1, user);
         shoppingCartService.addSession(movieSession2, user);
         shoppingCart = shoppingCartService.getByUser(user);
-        System.out.println(shoppingCart);
+        System.out.println("CART AFTER ADD SESSION\n" + shoppingCart);
 
         order = orderService.completeOrder(shoppingCart.getTickets(), user);
-        System.out.println("" + order);
+        System.out.println("ORDER AFTER COMPLETE ORDER\n" + order);
 
         List<Order> orderList = orderService.getOrderHistory(user);
-        System.out.println("ORDER HISTORY" + orderList);
+        orderList.forEach(System.out::println);
     }
 }
