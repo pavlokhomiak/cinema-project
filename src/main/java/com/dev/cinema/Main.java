@@ -31,9 +31,9 @@ public class Main {
                 .getInstance(UserService.class);
         final AuthenticationService authenticationService = (AuthenticationService) injector
                 .getInstance(AuthenticationService.class);
+        final OrderService orderService = (OrderService) injector.getInstance(OrderService.class);
         final ShoppingCartService shoppingCartService = (ShoppingCartService) injector
                 .getInstance(ShoppingCartService.class);
-        final OrderService orderService = (OrderService) injector.getInstance(OrderService.class);
 
         movieService.getAll().forEach(System.out::println);
         cinemaHallService.getAll().forEach(System.out::println);
