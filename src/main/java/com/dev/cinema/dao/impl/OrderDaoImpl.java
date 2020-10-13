@@ -41,7 +41,7 @@ public class OrderDaoImpl implements OrderDao {
             Query<Order> orderQuery = session
                     .createQuery("select distinct o from Order o "
                     + "left join fetch o.tickets "
-                    + "join fetch o.user "
+                    + "join o.user "
                     + "where o.user = :user", Order.class);
             orderQuery.setParameter("user", user);
             return orderQuery.getResultList();
