@@ -4,16 +4,19 @@ import com.dev.cinema.lib.Injector;
 import com.dev.cinema.model.CinemaHall;
 import com.dev.cinema.model.Movie;
 import com.dev.cinema.model.MovieSession;
+import com.dev.cinema.model.Order;
 import com.dev.cinema.model.ShoppingCart;
 import com.dev.cinema.model.User;
 import com.dev.cinema.security.AuthenticationService;
 import com.dev.cinema.service.CinemaHallService;
 import com.dev.cinema.service.MovieService;
 import com.dev.cinema.service.MovieSessionService;
+import com.dev.cinema.service.OrderService;
 import com.dev.cinema.service.ShoppingCartService;
 import com.dev.cinema.service.UserService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Main {
     private static Injector injector = Injector.getInstance("com.dev.cinema");
@@ -28,8 +31,10 @@ public class Main {
                 .getInstance(UserService.class);
         final AuthenticationService authenticationService = (AuthenticationService) injector
                 .getInstance(AuthenticationService.class);
+        final OrderService orderService = (OrderService) injector.getInstance(OrderService.class);
         final ShoppingCartService shoppingCartService = (ShoppingCartService) injector
                 .getInstance(ShoppingCartService.class);
+
         movieService.getAll().forEach(System.out::println);
         cinemaHallService.getAll().forEach(System.out::println);
 
@@ -87,16 +92,27 @@ public class Main {
         User user = userService.findByEmail("pawa@gmail.com").get();
         System.out.println(user);
 
-        ShoppingCart shoppingCart = shoppingCartService
-                .getByUser(userService.findByEmail("pawa@gmail.com").get());
-        System.out.println("FIRST " + shoppingCart);
-        shoppingCartService.addSession(movieSession,
-                userService.findByEmail("pawa@gmail.com").get());
-        shoppingCart = shoppingCartService
-                .getByUser(userService.findByEmail("pawa@gmail.com").get());
-        System.out.println("SECOND " + shoppingCart);
+        ShoppingCart shoppingCart = shoppingCartService.getByUser(user);
+        System.out.println("FIRST\n" + shoppingCart);
 
-        shoppingCartService.clear(shoppingCart);
-        System.out.println(shoppingCart);
+        shoppingCartService.addSession(movieSession, user);
+        shoppingCart = shoppingCartService.getByUser(user);
+        System.out.println("CART AFTER ADD SESSION\n" + shoppingCart);
+
+        Order order = orderService.completeOrder(shoppingCart.getTickets(), user);
+        System.out.println("ORDER AFTER COMPLETE ORDER\n" + order);
+        shoppingCart = shoppingCartService.getByUser(user);
+        System.out.println("CART AFTER COMPLETE ORDER\n" + shoppingCart);
+
+        shoppingCartService.addSession(movieSession1, user);
+        shoppingCartService.addSession(movieSession2, user);
+        shoppingCart = shoppingCartService.getByUser(user);
+        System.out.println("CART AFTER ADD SESSION\n" + shoppingCart);
+
+        order = orderService.completeOrder(shoppingCart.getTickets(), user);
+        System.out.println("ORDER AFTER COMPLETE ORDER\n" + order);
+
+        List<Order> orderList = orderService.getOrderHistory(user);
+        orderList.forEach(System.out::println);
     }
 }
