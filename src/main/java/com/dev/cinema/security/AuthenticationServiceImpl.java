@@ -1,5 +1,6 @@
 package com.dev.cinema.security;
 
+import com.dev.cinema.Main;
 import com.dev.cinema.exceptions.AuthenticationException;
 import com.dev.cinema.lib.Inject;
 import com.dev.cinema.lib.Service;
@@ -8,9 +9,11 @@ import com.dev.cinema.service.ShoppingCartService;
 import com.dev.cinema.service.UserService;
 import com.dev.cinema.util.HashUtil;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
+    private static final Logger logger = Logger.getLogger(Main.class.getName());
 
     @Inject
     private UserService userService;
@@ -23,6 +26,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throws AuthenticationException {
         Optional<User> userFromDB = userService.findByEmail(email);
         if (userFromDB.isPresent() && isPasswordValid(password, userFromDB.get())) {
+            logger.info("User: " + userFromDB + " has logged in ");
             return userFromDB.get();
         }
         throw new AuthenticationException("Incorrect username or password");
@@ -35,7 +39,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setPassword(password);
         User detachedUser = userService.add(user);
         shoppingCartService.registerNewShoppingCart(detachedUser);
-        return user;
+        logger.info("User: " + detachedUser + " has registered");
+        return detachedUser;
     }
 
     private boolean isPasswordValid(String password, User user) {

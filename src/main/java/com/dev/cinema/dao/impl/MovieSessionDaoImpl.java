@@ -8,12 +8,15 @@ import com.dev.cinema.util.HibernateUtil;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 @Dao
 public class MovieSessionDaoImpl implements MovieSessionDao {
+    private static final Logger logger = Logger.getLogger(MovieSessionDaoImpl.class);
+
     @Override
     public MovieSession add(MovieSession session) {
         Session hibernateSession = null;
@@ -23,6 +26,7 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
             transaction = hibernateSession.beginTransaction();
             hibernateSession.persist(session);
             transaction.commit();
+            logger.info("Movie session: " + session + " has added to DB");
             return session;
         } catch (Exception e) {
             if (transaction != null) {
