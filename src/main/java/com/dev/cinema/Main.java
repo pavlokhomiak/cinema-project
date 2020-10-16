@@ -1,5 +1,6 @@
 package com.dev.cinema;
 
+import com.dev.cinema.exceptions.AuthenticationException;
 import com.dev.cinema.lib.Injector;
 import com.dev.cinema.model.CinemaHall;
 import com.dev.cinema.model.Movie;
@@ -17,9 +18,11 @@ import com.dev.cinema.service.UserService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 public class Main {
     private static Injector injector = Injector.getInstance("com.dev.cinema");
+    private static final Logger logger = Logger.getLogger(Main.class);
 
     public static void main(String[] args) {
         MovieService movieService = (MovieService) injector.getInstance(MovieService.class);
@@ -35,8 +38,8 @@ public class Main {
         final ShoppingCartService shoppingCartService = (ShoppingCartService) injector
                 .getInstance(ShoppingCartService.class);
 
-        movieService.getAll().forEach(System.out::println);
-        cinemaHallService.getAll().forEach(System.out::println);
+        movieService.getAll().forEach(logger::info);
+        cinemaHallService.getAll().forEach(logger::info);
 
         Movie movie = new Movie();
         movie.setTitle("Fast and Furious");
@@ -45,13 +48,13 @@ public class Main {
         Movie movie1 = new Movie();
         movie1.setTitle("Avengers");
         movieService.add(movie1);
-        movieService.getAll().forEach(System.out::println);
+        movieService.getAll().forEach(logger::info);
 
         CinemaHall cinemaHall = new CinemaHall();
         cinemaHall.setCapacity(50);
         cinemaHall.setDescription("Best cinemaHall");
         cinemaHallService.add(cinemaHall);
-        cinemaHallService.getAll().forEach(System.out::println);
+        cinemaHallService.getAll().forEach(logger::info);
 
         MovieSession movieSession = new MovieSession();
         movieSession.setCinemaHall(cinemaHall);
@@ -79,40 +82,53 @@ public class Main {
 
         LocalDate localDate = LocalDate.of(2020, 10, 6);
         Long movieId = movie.getId();
-        movieSessionService.findAvailableSessions(movieId, localDate).forEach(System.out::println);
+        movieSessionService.findAvailableSessions(movieId, localDate).forEach(logger::info);
 
         String userOneEmail = "pawa@gmail.com";
         String userOnePassword = "1234";
-        authenticationService.register(userOneEmail, userOnePassword);
+        User userOne = authenticationService.register(userOneEmail, userOnePassword);
 
         String userTwoEmail = "pawawa@gmail.com";
         String userTwoPassword = "1234";
-        authenticationService.register(userTwoEmail, userTwoPassword);
+        User userTwo = authenticationService.register(userTwoEmail, userTwoPassword);
+
+        try {
+            authenticationService.login(userOneEmail, userOnePassword);
+        } catch (AuthenticationException e) {
+            logger.warn("User: " + userOne + " access denied ", e);
+        }
+
+        String userTwoIncorrectPassword = "4321";
+        try {
+            authenticationService.login(userTwoEmail, userTwoIncorrectPassword);
+        } catch (AuthenticationException e) {
+            logger.warn("User: " + userTwo + " access denied ", e);
+        }
 
         User user = userService.findByEmail("pawa@gmail.com").get();
-        System.out.println(user);
+        logger.info(user);
 
         ShoppingCart shoppingCart = shoppingCartService.getByUser(user);
-        System.out.println("FIRST\n" + shoppingCart);
+        logger.info("FIRST\n" + shoppingCart);
 
         shoppingCartService.addSession(movieSession, user);
         shoppingCart = shoppingCartService.getByUser(user);
-        System.out.println("CART AFTER ADD SESSION\n" + shoppingCart);
+        logger.info("CART AFTER ADD SESSION\n" + shoppingCart);
 
         Order order = orderService.completeOrder(shoppingCart.getTickets(), user);
-        System.out.println("ORDER AFTER COMPLETE ORDER\n" + order);
+        logger.info("ORDER AFTER COMPLETE ORDER\n" + order);
         shoppingCart = shoppingCartService.getByUser(user);
-        System.out.println("CART AFTER COMPLETE ORDER\n" + shoppingCart);
+        logger.info("CART AFTER COMPLETE ORDER\n" + shoppingCart);
 
         shoppingCartService.addSession(movieSession1, user);
         shoppingCartService.addSession(movieSession2, user);
         shoppingCart = shoppingCartService.getByUser(user);
-        System.out.println("CART AFTER ADD SESSION\n" + shoppingCart);
+        logger.info("CART AFTER ADD SESSION\n" + shoppingCart);
 
         order = orderService.completeOrder(shoppingCart.getTickets(), user);
-        System.out.println("ORDER AFTER COMPLETE ORDER\n" + order);
+        logger.info("ORDER AFTER COMPLETE ORDER\n" + order);
 
         List<Order> orderList = orderService.getOrderHistory(user);
-        orderList.forEach(System.out::println);
+        orderList.forEach(logger::info);
     }
 }
