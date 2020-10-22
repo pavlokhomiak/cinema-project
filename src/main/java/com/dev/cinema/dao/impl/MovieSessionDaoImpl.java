@@ -2,27 +2,33 @@ package com.dev.cinema.dao.impl;
 
 import com.dev.cinema.dao.MovieSessionDao;
 import com.dev.cinema.exceptions.DataProcessingException;
-import com.dev.cinema.lib.Dao;
 import com.dev.cinema.model.MovieSession;
-import com.dev.cinema.util.HibernateUtil;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Repository;
 
-@Dao
+@Repository
 public class MovieSessionDaoImpl implements MovieSessionDao {
     private static final Logger logger = Logger.getLogger(MovieSessionDaoImpl.class);
+
+    private SessionFactory sessionFactory;
+
+    public MovieSessionDaoImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
     public MovieSession add(MovieSession session) {
         Session hibernateSession = null;
         Transaction transaction = null;
         try {
-            hibernateSession = HibernateUtil.getSessionFactory().openSession();
+            hibernateSession = sessionFactory.openSession();
             transaction = hibernateSession.beginTransaction();
             hibernateSession.persist(session);
             transaction.commit();
@@ -43,7 +49,7 @@ public class MovieSessionDaoImpl implements MovieSessionDao {
 
     @Override
     public List<MovieSession> findAvailableSessions(Long movieId, LocalDate date) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             Query<MovieSession> query = session.createQuery("from MovieSession ms "
                     + "join fetch ms.movie m "
                     + "join fetch ms.cinemaHall "
