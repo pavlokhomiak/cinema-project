@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class OrderServiceImpl implements OrderService {
     private OrderDao orderDao;
-
     private ShoppingCartService shoppingCartService;
 
     public OrderServiceImpl(OrderDao orderDao, ShoppingCartService shoppingCartService) {

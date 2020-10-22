@@ -15,7 +15,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private static final Logger logger = Logger.getLogger(Main.class.getName());
 
     private UserService userService;
-
     private ShoppingCartService shoppingCartService;
 
     public AuthenticationServiceImpl(UserService userService, ShoppingCartService shoppingCartService) {
