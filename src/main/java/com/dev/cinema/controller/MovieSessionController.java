@@ -26,12 +26,12 @@ public class MovieSessionController {
         this.movieSessionMapper = movieSessionMapper;
     }
 
-    @PostMapping("/add")
+    @PostMapping
     public void addMovieSession(@RequestBody MovieSessionRequestDto dto) {
         movieSessionService.add(movieSessionMapper.toMovieSession(dto));
     }
 
-    @GetMapping("/available")
+    @GetMapping
     public List<MovieSessionResponseDto> getMovieSessionDto(
             @RequestParam(name = "movieId") Long id,
             @RequestParam @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate date) {
