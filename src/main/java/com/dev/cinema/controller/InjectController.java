@@ -4,12 +4,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-@RequestMapping("/hello")
-public class HelloController {
+import java.util.ArrayList;
+import java.util.List;
 
-    @GetMapping
-    public String sayHello() {
-        return "hello";
-    }
+@RestController
+@RequestMapping("/inject")
+public class InjectController {
+
+//    @GetMapping
+//    public List injectData() {
+//        List list = new ArrayList<>();
+//        list.add()
+//    }
 }
