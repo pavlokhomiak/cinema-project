@@ -10,7 +10,6 @@ public class TicketMapper {
         TicketResponseDto dto = new TicketResponseDto();
         dto.setId(ticket.getId());
         dto.setMovieSessionId(ticket.getMovieSession().getId());
-        dto.setUserId(ticket.getUser().getId());
         return dto;
     }
 }

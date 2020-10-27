@@ -6,5 +6,4 @@ import lombok.Data;
 public class TicketResponseDto {
     private Long id;
     private Long movieSessionId;
-    private Long userId;
 }
