@@ -1,6 +1,5 @@
 package com.dev.cinema.security;
 
-import com.dev.cinema.Main;
 import com.dev.cinema.exceptions.AuthenticationException;
 import com.dev.cinema.model.User;
 import com.dev.cinema.service.ShoppingCartService;
@@ -12,12 +11,14 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
-    private static final Logger logger = Logger.getLogger(Main.class.getName());
+    private static final Logger logger =
+            Logger.getLogger(AuthenticationServiceImpl.class.getName());
 
     private UserService userService;
     private ShoppingCartService shoppingCartService;
 
-    public AuthenticationServiceImpl(UserService userService, ShoppingCartService shoppingCartService) {
+    public AuthenticationServiceImpl(UserService userService,
+                                     ShoppingCartService shoppingCartService) {
         this.userService = userService;
         this.shoppingCartService = shoppingCartService;
     }

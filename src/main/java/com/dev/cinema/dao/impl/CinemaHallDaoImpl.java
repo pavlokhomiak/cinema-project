@@ -5,7 +5,6 @@ import com.dev.cinema.exceptions.DataProcessingException;
 import com.dev.cinema.model.CinemaHall;
 import java.util.List;
 import java.util.Optional;
-
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
