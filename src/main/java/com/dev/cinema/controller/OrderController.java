@@ -2,7 +2,6 @@ package com.dev.cinema.controller;
 
 import com.dev.cinema.model.Ticket;
 import com.dev.cinema.model.User;
-import com.dev.cinema.model.dto.OrderRequestDto;
 import com.dev.cinema.model.dto.OrderResponseDto;
 import com.dev.cinema.service.OrderService;
 import com.dev.cinema.service.ShoppingCartService;
@@ -10,11 +9,12 @@ import com.dev.cinema.service.UserService;
 import com.dev.cinema.util.mapper.OrderMapper;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -36,16 +36,19 @@ public class OrderController {
     }
 
     @PostMapping("/complete")
-    public void completeOrder(@RequestBody OrderRequestDto dto) {
-        User user = userService.findByEmail(dto.getUserEmail()).get();
+    public void completeOrder(@RequestBody Authentication authentication) {
+        UserDetails principal = (UserDetails) authentication.getPrincipal();
+        User user = userService.findByEmail(principal.getUsername()).get();
         List<Ticket> ticketList = shoppingCartService.getByUser(user).getTickets();
         orderService.completeOrder(ticketList, user);
     }
 
     @GetMapping
     public List<OrderResponseDto> getOrdersByUserId(
-            @RequestParam Long userId) {
-        User user = userService.findById(userId).get();
+            Authentication authentication) {
+        UserDetails principal = (UserDetails) authentication.getPrincipal();
+        String email = principal.getUsername();
+        User user = userService.findByEmail(email).get();
         return orderService.getOrderHistory(user).stream()
                 .map(orderMapper::toOrderResponseDto)
                 .collect(Collectors.toList());
