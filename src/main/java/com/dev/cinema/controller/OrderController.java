@@ -2,7 +2,6 @@ package com.dev.cinema.controller;
 
 import com.dev.cinema.model.Ticket;
 import com.dev.cinema.model.User;
-import com.dev.cinema.model.dto.OrderRequestDto;
 import com.dev.cinema.model.dto.OrderResponseDto;
 import com.dev.cinema.service.OrderService;
 import com.dev.cinema.service.ShoppingCartService;
@@ -10,7 +9,6 @@ import com.dev.cinema.service.UserService;
 import com.dev.cinema.util.mapper.OrderMapper;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.validation.Valid;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,8 +36,9 @@ public class OrderController {
     }
 
     @PostMapping("/complete")
-    public void completeOrder(@RequestBody @Valid OrderRequestDto dto) {
-        User user = userService.findByEmail(dto.getUserEmail()).get();
+    public void completeOrder(@RequestBody Authentication authentication) {
+        UserDetails principal = (UserDetails) authentication.getPrincipal();
+        User user = userService.findByEmail(principal.getUsername()).get();
         List<Ticket> ticketList = shoppingCartService.getByUser(user).getTickets();
         orderService.completeOrder(ticketList, user);
     }

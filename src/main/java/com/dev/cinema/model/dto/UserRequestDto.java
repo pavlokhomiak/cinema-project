@@ -7,7 +7,8 @@ import lombok.Data;
 @Data
 @FieldsValueMatch(
         field = "password",
-        fieldMatch = "repeatPassword")
+        fieldMatch = "repeatPassword",
+        message = "Password is not much")
 public class UserRequestDto {
     @EmailConstraint
     private String userEmail;

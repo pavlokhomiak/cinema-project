@@ -11,7 +11,6 @@ public class EmailValidator implements
     @Override
     public boolean isValid(String field,
                            ConstraintValidatorContext constraintValidatorContext) {
-        return field != null && field
-                .matches(EMAIL_REGEX);
+        return field != null && field.matches(EMAIL_REGEX);
     }
 }
