@@ -1,10 +1,14 @@
 package com.dev.cinema.model;
 
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import lombok.Data;
 
@@ -18,4 +22,7 @@ public class User {
     @Column(unique = true)
     private String email;
     private String password;
+    @ManyToMany
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles;
 }
