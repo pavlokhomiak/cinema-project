@@ -3,8 +3,6 @@ package com.dev.cinema.model;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,6 +21,5 @@ public class User {
     private String email;
     private String password;
     @ManyToMany
-    @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 }
