@@ -1,8 +1,10 @@
 package com.dev.cinema.dao.impl;
 
 import com.dev.cinema.dao.RoleDao;
+import com.dev.cinema.exceptions.DataProcessingException;
 import com.dev.cinema.model.Role;
 import java.util.Optional;
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -11,6 +13,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class RoleDaoImpl implements RoleDao {
+    private static final Logger logger = Logger.getLogger(RoleDaoImpl.class);
+
     private SessionFactory sessionFactory;
 
     public RoleDaoImpl(SessionFactory sessionFactory) {
@@ -18,7 +22,7 @@ public class RoleDaoImpl implements RoleDao {
     }
 
     @Override
-    public void add(Role role) {
+    public Role add(Role role) {
         Session session = null;
         Transaction transaction = null;
         try {
@@ -26,10 +30,13 @@ public class RoleDaoImpl implements RoleDao {
             transaction = session.beginTransaction();
             session.save(role);
             transaction.commit();
+            logger.info("Role: " + role + " has added to DB");
+            return role;
         } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
             }
+            throw new DataProcessingException("Can't add Role " + role, e);
         } finally {
             if (session != null) {
                 session.close();

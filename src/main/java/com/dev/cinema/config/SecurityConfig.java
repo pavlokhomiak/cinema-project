@@ -29,19 +29,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .and()
-                .authorizeRequests()
-                .antMatchers(HttpMethod.POST,"/movies/**").hasRole(ADMIN)
-                .antMatchers(HttpMethod.GET,"/movies/**").permitAll()
-                .antMatchers(HttpMethod.POST,"/cinema-halls/**").hasRole(ADMIN)
-                .antMatchers(HttpMethod.GET,"/cinema-halls/**").permitAll()
-                .antMatchers(HttpMethod.POST,"/movie-session/**").hasRole(ADMIN)
-                .antMatchers(HttpMethod.GET,"/movie-session/available**").permitAll()
-                .antMatchers(HttpMethod.POST,"/orders/**").hasRole(USER)
-                .antMatchers(HttpMethod.GET,"/orders/**").hasRole(USER)
+                .antMatchers(HttpMethod.POST,
+                        "/movies/**",
+                        "/cinema-halls/**",
+                        "/movie-session/**").hasRole(ADMIN)
+                .antMatchers(HttpMethod.GET,
+                        "/movies/**",
+                        "/cinema-halls/**",
+                        "/movie-session/available**").permitAll()
+                .antMatchers(HttpMethod.POST,
+                        "/orders/**",
+                        "/shopping-carts/movie-sessions/**").hasRole(USER)
+                .antMatchers(HttpMethod.GET,
+                        "/orders/**",
+                        "/shopping-carts/by-user/**").hasRole(USER)
                 .antMatchers(HttpMethod.GET,"/users/by-email/**").hasRole(ADMIN)
-                .antMatchers(HttpMethod.POST,"/shopping-carts/movie-sessions/**").hasRole(USER)
-                .antMatchers(HttpMethod.GET,"/shopping-carts/by-user/**").permitAll()
                 .antMatchers(HttpMethod.POST,"/registration").permitAll()
                 .anyRequest()
                 .authenticated()
