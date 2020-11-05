@@ -47,7 +47,8 @@ public class UserDaoImpl implements UserDao {
     @Override
     public Optional<User> findByEmail(String email) {
         try (Session session = sessionFactory.openSession()) {
-            Query<User> query = session.createQuery("from User "
+            Query<User> query = session.createQuery("from User u "
+                    + "join fetch u.roles "
                     + "where email = :email", User.class);
             query.setParameter("email", email);
             return query.uniqueResultOptional();
@@ -57,7 +58,11 @@ public class UserDaoImpl implements UserDao {
     @Override
     public Optional<User> findById(Long id) {
         try (Session session = sessionFactory.openSession()) {
-            return Optional.ofNullable(session.get(User.class, id));
+            Query<User> query = session.createQuery("from User u "
+                    + "join fetch u.roles "
+                    + "where u.id = :id", User.class);
+            query.setParameter("id", id);
+            return query.uniqueResultOptional();
         }
     }
 }
